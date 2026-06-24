@@ -1,12 +1,12 @@
 SHELL = /bin/sh
 NAME = codexion.a
-SRC = coders/codexion.c
+SRC = src/codexion.c src/parser.c
 OBJ = $(SRC:.c=.o)
 DEP = $(OBJ:.o=.d)
 CC = cc
 AR = ar rcs
-CPPFLAGS = -I ./coders
-CFLAGS = -Wall -Wextra -Werror -M
+CPPFLAGS = -I ./src -MMD
+CFLAGS = -Wall -Wextra -Werror -pthread 
 RM = rm -f
 
 -include $(DEP)
