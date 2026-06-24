@@ -1,6 +1,6 @@
 SHELL = /bin/sh
 NAME = codexion.a
-SRC = src/codexion.c
+SRC = src/codexion.c src/parser.c
 OBJ = $(SRC:.c=.o)
 DEP = $(OBJ:.o=.d)
 CC = cc
