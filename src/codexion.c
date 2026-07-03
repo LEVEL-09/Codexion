@@ -14,7 +14,7 @@
 
 int	main(int argc, char *argv[])
 {
-	int		i;
+	int			i;
 	long		number_of_coders;
 	t_coder		*coders_struct;
 	t_dongle	*dongle_struct;

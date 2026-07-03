@@ -55,7 +55,7 @@ int	check_argument(int argc, char *argv[])
 	{
 		number = ft_atoi(argv[i]);
 		if (number > INT_MAX || number == -1)
-			return (fprintf(stderr, "max number is MAX_INT\n"));
+			return (0);
 		i++;
 	}
 	return (1);
