@@ -33,12 +33,11 @@ struct s_coder
 
 struct s_dongle
 {
-	char			*name;
 	int				dongle_cooldown;
 	pthread_mutex_t	dongle_mutex;
 };
 
-int		check_argument(int argc, char *argv[]);
+int			check_argument(int argc, char *argv[]);
 t_coder		coder_init(char *argv[]);
 t_dongle	dongle_init(char *argv[]);
 long		ft_atoi(const char *str);
