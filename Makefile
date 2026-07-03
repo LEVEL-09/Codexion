@@ -1,20 +1,17 @@
 SHELL = /bin/sh
-NAME = codexion.a
-SRC = src/codexion.c
+NAME = codexion
+SRC = src/codexion.c src/parser.c src/ft_atoi.c
 OBJ = $(SRC:.c=.o)
 DEP = $(OBJ:.o=.d)
 CC = cc
-AR = ar rcs
 CPPFLAGS = -I ./src -MMD
-CFLAGS = -Wall -Wextra -Werror -pthread 
-RM = rm -f
+CFLAGS = -Wall -Wextra -Werror -pthread
 
--include $(DEP)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(AR) $(NAME) $(OBJ)
+	$(CC) $(OBJ) -o $(NAME)
 
 %.o: %.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
@@ -26,5 +23,7 @@ fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
+
+-include $(DEP)
 
 .PHONY: all clean fclean re
