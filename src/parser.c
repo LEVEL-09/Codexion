@@ -6,15 +6,15 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 20:28:06 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/03 16:18:38 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/07/06 15:31:53 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <codexion.h>
+#include "codexion.h"
 
 int	check_number(char *s)
 {
-	int	i;
+	int			i;
 
 	i = 0;
 	while (s[i])
@@ -35,8 +35,8 @@ int	check_scheduler(char *s)
 
 int	check_argument(int argc, char *argv[])
 {
-	int		i;
-	long	number;
+	int			i;
+	long		number;
 
 	if (argc != 9)
 		return (0);
@@ -49,7 +49,6 @@ int	check_argument(int argc, char *argv[])
 		|| !check_number(argv[7])
 		|| !check_scheduler(argv[8]))
 		return (0);
-
 	i = 1;
 	while (i != 8)
 	{
@@ -61,9 +60,9 @@ int	check_argument(int argc, char *argv[])
 	return (1);
 }
 
-t_coder coder_init(char *argv[])
+t_coder	coder_init(char *argv[])
 {
-	t_coder	coder;
+	t_coder		coder;
 
 	coder.time_to_burnout = ft_atoi(argv[2]);
 	coder.time_to_compile = ft_atoi(argv[3]);
@@ -73,7 +72,7 @@ t_coder coder_init(char *argv[])
 	return (coder);
 }
 
-t_dongle dongle_init(char *argv[])
+t_dongle	dongle_init(char *argv[])
 {
 	t_dongle	dongle;
 
