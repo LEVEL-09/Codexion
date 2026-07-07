@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 20:23:45 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/06 18:53:15 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/07/07 09:29:38 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ struct s_heap
 };
 
 int					check_argument(int argc, char *argv[]);
+void				swap_coder(t_coder **a, t_coder **b);
 t_coder				coder_init(char *argv[]);
 t_dongle			dongle_init(char *argv[]);
 long				ft_atoi(const char *str);

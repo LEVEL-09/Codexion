@@ -1,6 +1,6 @@
 SHELL = /bin/sh
 NAME = codexion
-SRC = src/codexion.c src/parser.c src/ft_atoi.c src/heap.c
+SRC = src/codexion.c src/parser.c src/ft_atoi.c src/heap.c src/heap_utils.c
 OBJ = $(SRC:.c=.o)
 DEP = $(OBJ:.o=.d)
 CC = cc
