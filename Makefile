@@ -1,11 +1,12 @@
 SHELL = /bin/sh
 NAME = codexion
-SRC = src/codexion.c src/parser.c src/ft_atoi.c src/heap.c
+SRC = src/codexion.c src/codexion_utils.c src/parser.c src/ft_atoi.c src/heap.c src/heap_utils.c
 OBJ = $(SRC:.c=.o)
 DEP = $(OBJ:.o=.d)
 CC = cc
 CPPFLAGS = -I ./src -MMD
 CFLAGS = -Wall -Wextra -Werror -pthread
+DBG = -fsanitize=address -g3
 
 
 all: $(NAME)
