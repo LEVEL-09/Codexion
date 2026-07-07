@@ -6,11 +6,11 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 10:29:45 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/03 15:41:20 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/07/07 06:24:44 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <codexion.h>
+#include "codexion.h"
 
 static int	check_sp(char s)
 {
