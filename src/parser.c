@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 20:28:06 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/06 15:31:53 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/07/07 07:58:32 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	check_number(char *s)
 	int			i;
 
 	i = 0;
+	if (s[i] == '\0')
+		return (0);
 	while (s[i])
 	{
 		if (!('0' <= s[i] && s[i] <= '9'))
