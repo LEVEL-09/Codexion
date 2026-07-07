@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/04 12:57:25 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/06 18:53:04 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/07/07 06:29:32 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,18 @@ void	min_heap(t_heap *heap, int index)
 	coder = index;
 	left_coder = index * 2 + 1;
 	right_coder = index * 2 + 2;
-	if (left_coder < heap->size
-		&& heap->array[left_coder]->time_to_burnout < heap->array[coder]->time_to_burnout)
-		coder = left_coder;
-	if (right_coder < heap->size
-		&& heap->array[right_coder]->time_to_burnout < heap->array[coder]->time_to_burnout)
-		coder = right_coder;
+	if (left_coder < heap->size)
+	{
+		if (heap->array[left_coder]->time_to_burnout
+			< heap->array[coder]->time_to_burnout)
+			coder = left_coder;
+	}
+	if (right_coder < heap->size)
+	{
+		if (heap->array[right_coder]->time_to_burnout
+			< heap->array[coder]->time_to_burnout)
+			coder = right_coder;
+	}
 	if (coder != index)
 	{
 		swap_coder(&heap->array[coder], &heap->array[index]);

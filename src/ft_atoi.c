@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 10:29:45 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/06 15:32:00 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/07/07 06:24:44 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	ft_overflow(int neg)
 	return (-1);
 }
 
-long		ft_atoi(const char *str)
+long	ft_atoi(const char *str)
 {
 	int			i;
 	int			neg;
