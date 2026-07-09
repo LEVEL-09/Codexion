@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 20:28:06 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/08 10:22:25 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/07/16 20:25:56 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,24 +60,4 @@ int	check_argument(int argc, char *argv[])
 		i++;
 	}
 	return (1);
-}
-
-t_coder	*coder_init(t_coder *coder, pthread_t *thread, char *argv[], int i)
-{
-	coder->id = i + 1;
-	coder->thread = thread;
-	coder->time_to_burnout = ft_atoi(argv[2]);
-	coder->time_to_compile = ft_atoi(argv[3]);
-	coder->time_to_debug = ft_atoi(argv[4]);
-	coder->time_to_refactor = ft_atoi(argv[5]);
-	coder->number_of_compiles_required = ft_atoi(argv[6]);
-	return (coder);
-}
-
-t_dongle	*dongle_init(t_dongle *dongle, pthread_mutex_t *mutex, char *argv[], int i)
-{
-	dongle->id = i + 1;
-	dongle->mutex = mutex;
-	dongle->cooldown = ft_atoi(argv[7]);
-	return (dongle);
 }
