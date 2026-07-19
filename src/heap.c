@@ -6,11 +6,12 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/04 12:57:25 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/13 09:42:06 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/07/22 05:32:15 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "heap.h"
+#include "coder.h"
 
 t_heap	*create_heap(int capacity)
 {

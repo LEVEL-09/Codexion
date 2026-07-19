@@ -6,13 +6,13 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 20:28:06 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/16 20:25:56 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/07/22 05:02:05 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int	check_number(char *s)
+static int	check_number(char *s)
 {
 	int			i;
 
@@ -28,7 +28,7 @@ int	check_number(char *s)
 	return (1);
 }
 
-int	check_scheduler(char *s)
+static int	check_scheduler(char *s)
 {
 	if (!strcmp(s, "fifo") || !strcmp(s, "edf"))
 		return (1);

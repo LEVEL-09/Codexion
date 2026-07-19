@@ -6,11 +6,12 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 09:27:04 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/13 09:41:43 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/07/22 05:32:04 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "heap.h"
+#include "coder.h"
 
 void	swap_coder(t_coder **a, t_coder **b)
 {
