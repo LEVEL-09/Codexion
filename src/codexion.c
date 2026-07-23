@@ -6,148 +6,123 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 15:10:57 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/22 06:04:16 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/10 18:54:11 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* IWYU */
 #include "codexion.h"
 #include "coder.h"
+#include "heap.h"
+#include "config.h"
 #include "dongle.h"
 #include "monitor.h"
+#include <stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
 
-/* TODO:
-	chore fix norminette
-*/
-
-void	coder_refactoring(void *coder)
+static void	request_dongle(t_coder *coder, t_dongle *dongle)
 {
-	t_coder			*now_coder;
-	struct timespec	time;
-
-	now_coder = coder;
-	if (coder_check_flag(now_coder))
-		return ;
-	printf("%ld %d is refactoring\n",
-		get_time_of_now(now_coder->start_time), now_coder->id);
-	coder_sleeping(now_coder);
-	return ;
+	pthread_mutex_lock(&dongle->mutex);
+	insert_heap(dongle->heap, coder);
+	if (dongle->schedule == EDF && dongle->heap->size > 1)
+		heapify(dongle->heap);
+	while (dongle->heap->array[0]->id != coder->id)
+		pthread_cond_wait(&dongle->cond, &dongle->mutex);
+	extract_coder(dongle->heap);
+	pthread_mutex_unlock(&dongle->mutex);
 }
 
-void	coder_debugging(void *coder)
+static void	get_dongles(t_coder *coder)
 {
-	t_coder			*now_coder;
-	struct timespec	time;
+	t_dongle	*tmp;
 
-	now_coder = coder;
-	if (coder_check_flag(now_coder))
+	if (coder->config->number_of_coders == 1)
+	{
+		printf("%ld %d has taken a dongle\n",
+			get_time_of_now(coder->config->start_time), coder->id);
+		pthread_mutex_lock(&coder->config->mutex_burnout);
+		pthread_cond_wait(&coder->config->cond_burnout,
+			&coder->config->mutex_burnout);
+		pthread_mutex_unlock(&coder->config->mutex_burnout);
 		return ;
-	printf("%ld %d is debugging\n",
-		get_time_of_now(now_coder->start_time), now_coder->id);
-	coder_sleeping(now_coder);
+	}
+	request_dongle(coder, coder->left_dongle);
+	request_dongle(coder, coder->right_dongle);
+	if (coder->left_dongle->id > coder->right_dongle->id)
+	{
+		tmp = coder->left_dongle;
+		coder->left_dongle = coder->right_dongle;
+		coder->right_dongle = tmp;
+	}
+	coder_compiling(coder);
+	coder_debugging(coder);
+	coder_refactoring(coder);
 }
 
-void	coder_compiling(void *coder)
-{
-	t_coder			*now_coder;
-	long			time_of_now;
-
-	now_coder = coder;
-	if (coder_check_flag(now_coder))
-		return ;
-	dongle_cooldown(now_coder, now_coder->left_dongle);
-	if (coder_check_flag(now_coder))
-		return ;
-	dongle_cooldown(now_coder, now_coder->right_dongle);
-	if (coder_check_flag(now_coder))
-		return ;
-	printf("%ld %d has taken a dongle\n",
-		get_time_of_now(now_coder->start_time), now_coder->id);
-	printf("%ld %d has taken a dongle\n",
-		get_time_of_now(now_coder->start_time), now_coder->id);
-	printf("%ld %d is compiling\n",
-		get_time_of_now(now_coder->start_time), now_coder->id);
-	coder_sleeping(now_coder);
-	now_coder->last_time_compile = get_time_of_now(now_coder->start_time);
-	time_of_now = get_time_of_now(now_coder->start_time) + now_coder->right_dongle->cooldown;
-	now_coder->left_dongle->time_to_wait_dongle = time_of_now;
-	now_coder->right_dongle->time_to_wait_dongle = time_of_now;
-	now_coder->number_of_compiles_required -= 1;
-}
-
-void	*routine(void *coder)
+static void	*routine(void *coder)
 {
 	t_coder			*now_coder;
 
 	now_coder = coder;
+	sleep_even(now_coder);
+	if (coder_check_flag(now_coder))
+		return (NULL);
 	while (true)
 	{
-		check_dongles_states(now_coder);
-		pthread_mutex_lock(now_coder->burn_out_mutex);
-		if (*now_coder->flag_burnout == true)
+		get_dongles(now_coder);
+		pthread_mutex_lock(&now_coder->config->mutex_burnout);
+		if (now_coder->config->flag_burnout)
 		{
-			pthread_mutex_unlock(now_coder->burn_out_mutex);
+			pthread_mutex_unlock(&now_coder->config->mutex_burnout);
 			return (NULL);
 		}
-		pthread_mutex_unlock(now_coder->burn_out_mutex);
-		if (now_coder->number_of_compiles_required == 0)
+		else if (now_coder->number_of_compiles_required <= 0)
 		{
-			printf("%ld %d finish compiling required\n", get_time_of_now(now_coder->start_time), now_coder->id); /* For Debug */
+			now_coder->config->number_of_coders_completed++;
+			now_coder->flag_complete = true;
+			pthread_mutex_unlock(&now_coder->config->mutex_burnout);
 			break ;
 		}
+		pthread_mutex_unlock(&now_coder->config->mutex_burnout);
 	}
 	return (NULL);
 }
 
+static int	run_threads(t_sim *sim)
+{
+	int	i;
+
+	if (pthread_create(&sim->monitor->thread, NULL, monitor_check,
+			sim->monitor) != 0)
+	{
+		fprintf(stderr, "Error: Failed to create monitor thread\n");
+		return (0);
+	}
+	i = 0;
+	while (i < sim->config->number_of_coders)
+	{
+		if (pthread_create(&sim->coders[i]->thread, NULL, routine,
+				sim->coders[i]) != 0)
+		{
+			fprintf(stderr, "Error: Failed to create coder thread\n");
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
 int	main(int argc, char *argv[])
 {
-	int				i;
-	int				number_of_coders;
-	t_coder			**coders;
-	t_dongle		**dongles;
+	t_sim	sim;
 
-	bool			flag;
-
-	flag = false;
-
-	/* Mointor use monitor create in monitor.c*/
-	t_monitor		monitor;
-	pthread_t		*monitor_thread;
-	pthread_cond_t	monitor_cond;
-	pthread_mutex_t	mutex;
-
-	if (!check_argument(argc, argv))
-		return (fprintf(stderr, "Error: Invalid arguments\n"));
-	number_of_coders = (int)ft_atoi(argv[1]);
-
-	pthread_mutex_init(&mutex, NULL);
-	pthread_cond_init(&monitor_cond, NULL);
-	coders = create_coders(number_of_coders, argv, get_time_of_now(0), &mutex, &flag, &monitor_cond);
-	dongles = create_dongles(number_of_coders, argv);
-
-	i = 0;
-	while (i < number_of_coders - 1)
+	if (!init_simulation(argc, argv, &sim))
+		return (1);
+	if (!run_threads(&sim))
 	{
-		coders[i]->left_dongle = dongles[i];
-		coders[i]->right_dongle = dongles[i + 1];
-		i++;
+		destroy_everything(&sim, sim.config->number_of_coders);
+		return (1);
 	}
-
-	monitor.coders = coders;
-	monitor.number_of_coder = number_of_coders;
-	monitor_thread = malloc(sizeof(pthread_t));
-	monitor.thread = monitor_thread;
-	monitor.cond = &monitor_cond;
-	monitor.burn_out_mutex = &mutex;
-	monitor.flag_burnout = &flag;
-	pthread_create(monitor.thread, NULL, monitor_check, &monitor);
-
-	i = 0;
-	while (i < number_of_coders - 1)
-	{
-		pthread_create(coders[i]->thread, NULL, routine, coders[i]);
-		pthread_join(*coders[i]->thread, NULL);
-		i++;
-	}
-	pthread_join(*monitor.thread, NULL);
+	join_and_cleanup(&sim);
+	return (0);
 }

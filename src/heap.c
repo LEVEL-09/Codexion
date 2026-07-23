@@ -6,12 +6,14 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/04 12:57:25 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/22 05:32:15 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/07/25 06:46:22 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "heap.h"
 #include "coder.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 t_heap	*create_heap(int capacity)
 {
