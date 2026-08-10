@@ -6,11 +6,9 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 10:29:45 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/07 06:24:44 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/11 00:45:10 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "codexion.h"
 
 static int	check_sp(char s)
 {
@@ -22,7 +20,7 @@ static int	check_sp(char s)
 
 static int	ft_overflow(int neg)
 {
-	if (neg < 0)
+	if (neg == -1)
 		return (0);
 	return (-1);
 }

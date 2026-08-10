@@ -6,11 +6,14 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/04 12:57:25 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/07 10:34:41 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/11 00:45:34 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "heap.h"
+#include "coder.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 t_heap	*create_heap(int capacity)
 {
@@ -28,34 +31,6 @@ t_heap	*create_heap(int capacity)
 	heap->capacity = capacity;
 	heap->size = 0;
 	return (heap);
-}
-
-void	min_heap(t_heap *heap, int index)
-{
-	int			coder;
-	int			left_coder;
-	int			right_coder;
-
-	coder = index;
-	left_coder = index * 2 + 1;
-	right_coder = index * 2 + 2;
-	if (left_coder < heap->size)
-	{
-		if (heap->array[left_coder]->time_to_burnout
-			< heap->array[coder]->time_to_burnout)
-			coder = left_coder;
-	}
-	if (right_coder < heap->size)
-	{
-		if (heap->array[right_coder]->time_to_burnout
-			< heap->array[coder]->time_to_burnout)
-			coder = right_coder;
-	}
-	if (coder != index)
-	{
-		swap_coder(&heap->array[coder], &heap->array[index]);
-		min_heap(heap, coder);
-	}
 }
 
 void	heapify(t_heap *heap)

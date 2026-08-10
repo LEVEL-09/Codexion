@@ -6,13 +6,15 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 20:28:06 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/07 07:58:32 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/11 00:45:40 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
+#include <string.h>
+#include <limits.h>
 
-int	check_number(char *s)
+static int	check_number(char *s)
 {
 	int			i;
 
@@ -28,7 +30,7 @@ int	check_number(char *s)
 	return (1);
 }
 
-int	check_scheduler(char *s)
+static int	check_scheduler(char *s)
 {
 	if (!strcmp(s, "fifo") || !strcmp(s, "edf"))
 		return (1);
@@ -59,25 +61,7 @@ int	check_argument(int argc, char *argv[])
 			return (0);
 		i++;
 	}
+	if (*argv[1] == '0' || *argv[6] == '0')
+		return (0);
 	return (1);
-}
-
-t_coder	coder_init(char *argv[])
-{
-	t_coder		coder;
-
-	coder.time_to_burnout = ft_atoi(argv[2]);
-	coder.time_to_compile = ft_atoi(argv[3]);
-	coder.time_to_debug = ft_atoi(argv[4]);
-	coder.time_to_refactor = ft_atoi(argv[5]);
-	coder.number_of_compiles_required = ft_atoi(argv[6]);
-	return (coder);
-}
-
-t_dongle	dongle_init(char *argv[])
-{
-	t_dongle	dongle;
-
-	dongle.dongle_cooldown = ft_atoi(argv[7]);
-	return (dongle);
 }

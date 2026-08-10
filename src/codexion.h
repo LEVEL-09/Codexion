@@ -6,51 +6,37 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 20:23:45 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/07/07 09:29:38 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/11 00:44:50 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CODEXION_H
 # define CODEXION_H
 
-# include <pthread.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <limits.h>
+# include <stdbool.h>
 
-typedef struct s_coder	t_coder;
-typedef struct s_dongle	t_dongle;
-typedef struct s_heap	t_heap;
+typedef struct s_coder		t_coder;
+typedef struct s_dongle		t_dongle;
+typedef struct s_config		t_config;
+typedef struct s_monitor	t_monitor;
 
-struct s_coder
+typedef struct s_sim
 {
-	int				coder_id;
-	int				time_to_burnout;
-	int				time_to_compile;
-	int				time_to_debug;
-	int				time_to_refactor;
-	int				number_of_compiles_required;
-};
+	t_config	*config;
+	t_coder		**coders;
+	t_dongle	**dongles;
+	t_monitor	*monitor;
+}	t_sim;
 
-struct s_dongle
-{
-	int				dongle_id; /* For Debug */
-	int				dongle_cooldown;
-	pthread_mutex_t	dongle_mutex;
-};
-
-struct s_heap
-{
-	t_coder			**array;
-	int				capacity;
-	int				size;
-};
-
-int					check_argument(int argc, char *argv[]);
-void				swap_coder(t_coder **a, t_coder **b);
-t_coder				coder_init(char *argv[]);
-t_dongle			dongle_init(char *argv[]);
-long				ft_atoi(const char *str);
+void		sleep_even(t_coder *coder);
+long		get_time_of_now(long start_time);
+void		dongle_cooldown(t_coder *coder, t_dongle *dongle);
+void		coder_sleeping(t_coder *coder, long time_to_sleep);
+bool		coder_check_flag(t_coder *coder);
+int			check_argument(int argc, char *argv[]);
+long		ft_atoi(const char *str);
+void		destroy_everything(t_sim *sim, int number_of_coders);
+int			init_simulation(int argc, char **argv, t_sim *sim);
+void		join_and_cleanup(t_sim *sim);
 
 #endif
