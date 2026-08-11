@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 15:10:57 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/11 00:44:27 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/11 16:43:31 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ static int	run_threads(t_sim *sim)
 				sim->coders[i]) != 0)
 		{
 			fprintf(stderr, "Error: Failed to create coder thread\n");
+			join_and_cleanup(sim, i);
 			return (0);
 		}
 		i++;
@@ -119,10 +120,7 @@ int	main(int argc, char *argv[])
 	if (!init_simulation(argc, argv, &sim))
 		return (1);
 	if (!run_threads(&sim))
-	{
-		destroy_everything(&sim, sim.config->number_of_coders);
 		return (1);
-	}
-	join_and_cleanup(&sim);
+	join_and_cleanup(&sim, sim.config->number_of_coders);
 	return (0);
 }

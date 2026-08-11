@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 18:22:23 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/10 18:54:54 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/11 16:32:14 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,12 @@ int	init_simulation(int argc, char **argv, t_sim *sim)
 	return (1);
 }
 
-void	join_and_cleanup(t_sim *sim)
+void	join_and_cleanup(t_sim *sim, int count)
 {
 	int	i;
 
 	i = 0;
-	while (i < sim->config->number_of_coders)
+	while (i < count)
 	{
 		if (pthread_join(sim->coders[i]->thread, NULL) != 0)
 			fprintf(stderr, "Error: Failed to join coder thread\n");
