@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 20:28:06 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/11 00:45:40 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/11 01:11:06 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	check_argument(int argc, char *argv[])
 			return (0);
 		i++;
 	}
-	if (*argv[1] == '0' || *argv[6] == '0')
+	if (*argv[1] == '0')
 		return (0);
 	return (1);
 }
