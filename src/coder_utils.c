@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/24 02:56:25 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/10 17:54:28 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:16:32 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "config.h"
 #include "codexion.h"
 #include <pthread.h>
+#include <stdio.h>
 
 void	init_coder_with_dongles(t_coder	**coders,
 									t_dongle **dongles,
@@ -41,11 +42,12 @@ void	init_coder_with_dongles(t_coder	**coders,
 
 void	release_dongles(t_coder *coder)
 {
+	printf("%ld %d is compiling\n",
+		get_time_of_now(coder->config->start_time), coder->id);
+	coder_sleeping(coder, coder->config->time_to_compile);
+	pthread_mutex_unlock(&coder->left_dongle->mutex);
+	pthread_mutex_unlock(&coder->right_dongle->mutex);
 	pthread_cond_signal(&coder->left_dongle->cond);
 	pthread_cond_signal(&coder->right_dongle->cond);
-	pthread_mutex_lock(&coder->config->mutex_burnout);
-	coder->last_time_compile
-		= get_time_of_now(coder->config->start_time);
-	pthread_mutex_unlock(&coder->config->mutex_burnout);
 	coder->number_of_compiles_required -= 1;
 }

@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 02:42:42 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/10 17:55:00 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:15:49 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,10 @@ void	coder_compiling(void *coder)
 		get_time_of_now(now_coder->config->start_time), now_coder->id);
 	printf("%ld %d has taken a dongle\n",
 		get_time_of_now(now_coder->config->start_time), now_coder->id);
-	printf("%ld %d is compiling\n",
-		get_time_of_now(now_coder->config->start_time), now_coder->id);
-	coder_sleeping(now_coder, now_coder->config->time_to_compile);
-	pthread_mutex_unlock(&now_coder->left_dongle->mutex);
-	pthread_mutex_unlock(&now_coder->right_dongle->mutex);
+	pthread_mutex_lock(&now_coder->config->mutex_burnout);
+	now_coder->last_time_compile
+		= get_time_of_now(now_coder->config->start_time);
+	pthread_mutex_unlock(&now_coder->config->mutex_burnout);
 	release_dongles(now_coder);
 }
 
