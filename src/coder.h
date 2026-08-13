@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 02:41:42 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/10 17:54:49 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/13 17:53:17 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@ typedef struct s_config		t_config;
 typedef struct s_coder
 {
 	int						id;
-	int						number_of_compiles_required;
+	int						numbers_of_compiles;
 	long					last_time_compile;
-	bool					flag_complete;
 	pthread_t				thread;
 	t_dongle				*left_dongle;
 	t_dongle				*right_dongle;
@@ -32,7 +31,7 @@ typedef struct s_coder
 }	t_coder;
 
 void		free_coders(t_coder **coders, int count);
-t_coder		**create_coders(t_config *config, int compiles_required);
+t_coder		**create_coders(t_config *config);
 void		coder_compiling(void *coder);
 void		coder_debugging(void *coder);
 void		coder_refactoring(void *coder);

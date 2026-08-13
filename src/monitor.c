@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 02:54:39 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/10 19:01:51 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/13 17:53:25 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static short	check_burnout(t_coder *coder, t_monitor *monitor)
 {
 	if (get_time_of_now(coder->config->start_time)
 		>= coder->last_time_compile
-		+ coder->config->time_to_burnout && !coder->flag_complete)
+		+ coder->config->time_to_burnout)
 	{
 		printf("%ld %d burned out\n",
 			get_time_of_now(coder->config->start_time), coder->id);

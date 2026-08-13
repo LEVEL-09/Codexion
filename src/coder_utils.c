@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/24 02:56:25 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/11 17:16:32 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/13 17:59:57 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,5 @@ void	release_dongles(t_coder *coder)
 	pthread_mutex_unlock(&coder->right_dongle->mutex);
 	pthread_cond_signal(&coder->left_dongle->cond);
 	pthread_cond_signal(&coder->right_dongle->cond);
-	coder->number_of_compiles_required -= 1;
+	coder->numbers_of_compiles += 1;
 }

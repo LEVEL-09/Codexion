@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/07 03:10:42 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/10 17:42:34 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/13 17:41:33 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_config
 	int						time_to_compile;
 	int						time_to_debug;
 	int						time_to_refactor;
+	int						number_of_compiles_required;
 	int						number_of_coders_completed;
 	long					start_time;
 	bool					flag_burnout;

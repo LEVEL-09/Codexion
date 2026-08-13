@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 15:10:57 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/11 16:43:31 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/13 18:01:47 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,9 @@ static void	*routine(void *coder)
 		return (NULL);
 	while (true)
 	{
+		if (now_coder->config->number_of_coders_completed
+			== now_coder->config->number_of_coders)
+			break ;
 		get_dongles(now_coder);
 		pthread_mutex_lock(&now_coder->config->mutex_burnout);
 		if (now_coder->config->flag_burnout)
@@ -76,13 +79,9 @@ static void	*routine(void *coder)
 			pthread_mutex_unlock(&now_coder->config->mutex_burnout);
 			return (NULL);
 		}
-		else if (now_coder->number_of_compiles_required <= 0)
-		{
+		else if (now_coder->numbers_of_compiles
+			== now_coder->config->number_of_compiles_required)
 			now_coder->config->number_of_coders_completed++;
-			now_coder->flag_complete = true;
-			pthread_mutex_unlock(&now_coder->config->mutex_burnout);
-			break ;
-		}
 		pthread_mutex_unlock(&now_coder->config->mutex_burnout);
 	}
 	return (NULL);

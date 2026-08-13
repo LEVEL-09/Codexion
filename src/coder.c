@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 02:42:42 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/11 17:15:49 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/13 17:53:08 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	free_coders(t_coder **coders, int count)
 	free(coders);
 }
 
-t_coder	**create_coders(t_config *config, int compiles_required)
+t_coder	**create_coders(t_config *config)
 {
 	int			i;
 	t_coder		**coders;
@@ -51,8 +51,7 @@ t_coder	**create_coders(t_config *config, int compiles_required)
 		}
 		coders[i]->id = i + 1;
 		coders[i]->last_time_compile = 0;
-		coders[i]->number_of_compiles_required = compiles_required;
-		coders[i]->flag_complete = false;
+		coders[i]->numbers_of_compiles = 0;
 		coders[i]->thread = 0;
 		coders[i]->config = config;
 		i++;

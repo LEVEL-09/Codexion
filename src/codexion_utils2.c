@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 18:22:23 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/11 16:32:14 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/13 18:00:49 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	init_sim_core(int argc, char **argv, t_sim *sim)
 		fprintf(stderr, "Error: Failed to initialize config\n");
 		return (0);
 	}
-	sim->coders = create_coders(sim->config, ft_atoi(argv[6]));
+	sim->coders = create_coders(sim->config);
 	if (!sim->coders)
 	{
 		destroy_config(sim->config);

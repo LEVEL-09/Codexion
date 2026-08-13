@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/04 12:57:25 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/13 16:36:43 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/13 18:01:20 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	extract_coder(t_heap *heap)
 		fprintf(stderr, "Heap is empty\n");
 		return ;
 	}
-
 	i = 0;
 	while (i < heap->size - 1)
 	{
