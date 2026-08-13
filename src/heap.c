@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/04 12:57:25 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/11 00:45:34 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/13 16:36:43 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,28 +56,22 @@ void	insert_heap(t_heap	*heap, t_coder *coder)
 	heap->size++;
 }
 
-t_coder	*extract_coder(t_heap *heap)
+void	extract_coder(t_heap *heap)
 {
-	t_coder		*root_coder;
 	int			i;
 
 	if (heap->size == 0)
 	{
 		fprintf(stderr, "Heap is empty\n");
-		return (NULL);
+		return ;
 	}
-	else if (heap->size == 1)
-	{
-		heap->size--;
-		return (heap->array[0]);
-	}
-	root_coder = heap->array[0];
+
 	i = 0;
-	while (i < heap->size)
+	while (i < heap->size - 1)
 	{
 		heap->array[i] = heap->array[i + 1];
 		i++;
 	}
+	heap->array[i] = NULL;
 	heap->size--;
-	return (root_coder);
 }
