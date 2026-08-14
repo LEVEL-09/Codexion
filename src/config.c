@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/07 03:10:38 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/10 17:43:42 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/14 03:12:34 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ t_config	*init_config(char *argv[])
 	config->time_to_compile = (int)ft_atoi(argv[3]);
 	config->time_to_debug = (int)ft_atoi(argv[4]);
 	config->time_to_refactor = (int)ft_atoi(argv[5]);
+	config->number_of_compiles_required = (int)ft_atoi(argv[6]);
 	config->number_of_coders_completed = 0;
 	config->start_time = get_time_of_now(0);
 	config->flag_burnout = false;
