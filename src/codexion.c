@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 15:10:57 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/13 18:01:47 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/14 05:16:39 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,24 @@
 
 static void	request_dongle(t_coder *coder, t_dongle *dongle)
 {
+	printf("%ld %d is requesting dongle %d\n",
+		get_time_of_now(coder->config->start_time), coder->id, dongle->id);
 	pthread_mutex_lock(&dongle->mutex);
 	insert_heap(dongle->heap, coder);
 	if (dongle->schedule == EDF && dongle->heap->size > 1)
 		heapify(dongle->heap);
 	while (dongle->heap->array[0]->id != coder->id)
+	{
+		printf("\033[1;33m%ld %d is waiting for dongle %d\033[0m\n",
+			get_time_of_now(coder->config->start_time), coder->id, dongle->id);
 		pthread_cond_wait(&dongle->cond, &dongle->mutex);
-	extract_coder(dongle->heap);
+		if (coder_check_flag(coder))
+		{
+			pthread_mutex_unlock(&dongle->mutex);
+			return ;
+		}
+	}
+	// extract_coder(dongle->heap);
 	pthread_mutex_unlock(&dongle->mutex);
 }
 
@@ -69,9 +80,6 @@ static void	*routine(void *coder)
 		return (NULL);
 	while (true)
 	{
-		if (now_coder->config->number_of_coders_completed
-			== now_coder->config->number_of_coders)
-			break ;
 		get_dongles(now_coder);
 		pthread_mutex_lock(&now_coder->config->mutex_burnout);
 		if (now_coder->config->flag_burnout)
@@ -82,6 +90,12 @@ static void	*routine(void *coder)
 		else if (now_coder->numbers_of_compiles
 			== now_coder->config->number_of_compiles_required)
 			now_coder->config->number_of_coders_completed++;
+		if (now_coder->config->number_of_coders_completed
+			== now_coder->config->number_of_coders)
+		{
+			pthread_mutex_unlock(&now_coder->config->mutex_burnout);
+			break ;
+		}
 		pthread_mutex_unlock(&now_coder->config->mutex_burnout);
 	}
 	return (NULL);
