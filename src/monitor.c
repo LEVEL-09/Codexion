@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 02:54:39 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/13 17:53:25 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/15 11:10:38 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void	*monitor_check(void *monitor)
 
 	i = 0;
 	now_monitor = monitor;
+	pthread_cond_wait(&now_monitor->config->cond_burnout,
+		&now_monitor->config->mutex_burnout);
 	while (true)
 	{
 		if (i >= now_monitor->config->number_of_coders)

@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 02:42:42 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/13 17:53:08 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/15 11:07:35 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "config.h"
 #include "dongle.h"
 #include "codexion.h"
+#include "heap.h"
+
 #include <stdbool.h>
 #include <pthread.h>
 #include <stdlib.h>
@@ -84,7 +86,16 @@ void	coder_compiling(void *coder)
 	now_coder->last_time_compile
 		= get_time_of_now(now_coder->config->start_time);
 	pthread_mutex_unlock(&now_coder->config->mutex_burnout);
-	release_dongles(now_coder);
+	printf("%ld %d is compiling\n",
+		get_time_of_now(now_coder->config->start_time), now_coder->id);
+	coder_sleeping(now_coder, now_coder->config->time_to_compile);
+	extract_coder(now_coder->left_dongle->heap);
+	extract_coder(now_coder->right_dongle->heap);
+	pthread_mutex_unlock(&now_coder->left_dongle->mutex);
+	pthread_mutex_unlock(&now_coder->right_dongle->mutex);
+	pthread_cond_signal(&now_coder->left_dongle->cond);
+	pthread_cond_signal(&now_coder->right_dongle->cond);
+	now_coder->numbers_of_compiles += 1;
 }
 
 void	coder_debugging(void *coder)

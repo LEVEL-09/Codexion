@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 15:10:57 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/14 05:16:39 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/15 11:18:40 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,12 @@
 
 static void	request_dongle(t_coder *coder, t_dongle *dongle)
 {
-	printf("%ld %d is requesting dongle %d\n",
-		get_time_of_now(coder->config->start_time), coder->id, dongle->id);
 	pthread_mutex_lock(&dongle->mutex);
 	insert_heap(dongle->heap, coder);
 	if (dongle->schedule == EDF && dongle->heap->size > 1)
 		heapify(dongle->heap);
 	while (dongle->heap->array[0]->id != coder->id)
-	{
-		printf("\033[1;33m%ld %d is waiting for dongle %d\033[0m\n",
-			get_time_of_now(coder->config->start_time), coder->id, dongle->id);
 		pthread_cond_wait(&dongle->cond, &dongle->mutex);
-		if (coder_check_flag(coder))
-		{
-			pthread_mutex_unlock(&dongle->mutex);
-			return ;
-		}
-	}
-	// extract_coder(dongle->heap);
 	pthread_mutex_unlock(&dongle->mutex);
 }
 
@@ -123,6 +111,8 @@ static int	run_threads(t_sim *sim)
 		}
 		i++;
 	}
+	sim->config->start_time = get_time_of_now(0);
+	pthread_cond_broadcast(&sim->config->cond_burnout);
 	return (1);
 }
 

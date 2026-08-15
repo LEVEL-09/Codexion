@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 12:33:13 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/10 18:08:19 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/15 02:29:45 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	sleep_even(t_coder *coder)
 		coder_sleeping(coder, coder->config->time_to_compile);
 	if (coder->config->number_of_coders % 2 != 0
 		&& coder->id == coder->config->number_of_coders)
-		coder_sleeping(coder, coder->config->time_to_compile * 2);
+		coder_sleeping(coder, coder->config->time_to_compile * 1.5);
 }
 
 long	get_time_of_now(long start_time)

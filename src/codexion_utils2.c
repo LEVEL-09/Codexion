@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 18:22:23 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/13 18:00:49 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/15 11:39:39 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,9 @@ void	join_and_cleanup(t_sim *sim, int count)
 	if (pthread_join(sim->monitor->thread, NULL) != 0)
 		fprintf(stderr, "Error: Failed to join monitor thread\n");
 	destroy_everything(sim, sim->config->number_of_coders);
+}
+
+void	*wait_for_create(void)
+{
+
 }
