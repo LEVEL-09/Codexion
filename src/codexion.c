@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 15:10:57 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/15 11:18:40 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/15 15:22:24 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,10 @@ static void	*routine(void *coder)
 			now_coder->config->number_of_coders_completed++;
 		if (now_coder->config->number_of_coders_completed
 			== now_coder->config->number_of_coders)
-		{
-			pthread_mutex_unlock(&now_coder->config->mutex_burnout);
 			break ;
-		}
 		pthread_mutex_unlock(&now_coder->config->mutex_burnout);
 	}
+	pthread_mutex_unlock(&now_coder->config->mutex_burnout);
 	return (NULL);
 }
 
@@ -111,8 +109,6 @@ static int	run_threads(t_sim *sim)
 		}
 		i++;
 	}
-	sim->config->start_time = get_time_of_now(0);
-	pthread_cond_broadcast(&sim->config->cond_burnout);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/07 03:10:42 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/13 17:41:33 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/15 15:22:41 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_config
 	int						number_of_coders_completed;
 	long					start_time;
 	bool					flag_burnout;
+	// bool					flag_status;
 	pthread_mutex_t			mutex_burnout;
 	pthread_cond_t			cond_burnout;
 }	t_config;

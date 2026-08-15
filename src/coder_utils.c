@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/24 02:56:25 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/15 11:59:10 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/15 15:21:49 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,6 @@ void	init_coder_with_dongles(t_coder	**coders,
 
 void	release_dongles(t_coder *coder)
 {
+	(void)coder;
+	// here
 }
