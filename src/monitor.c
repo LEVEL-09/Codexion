@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 02:54:39 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/15 17:30:26 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/15 21:18:43 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include <unistd.h>
 
 static short	check_burnout(t_coder *coder, t_monitor *monitor)
 {
@@ -56,7 +55,6 @@ void	*monitor_check(void *monitor)
 		}
 		else if (now_monitor->config->status == 1)
 			break ;
-		usleep(100);
 		pthread_mutex_unlock(&now_monitor->config->mutex_status);
 	}
 	pthread_mutex_unlock(&now_monitor->config->mutex_status);

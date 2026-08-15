@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 15:10:57 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/15 17:29:10 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/15 21:22:32 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 static void	request_dongle(t_coder *coder, t_dongle *dongle)
 {
@@ -75,7 +74,6 @@ static void	*routine(void *coder)
 		}
 		else if (now_coder->config->status == 1)
 			break ;
-		usleep(100);
 		pthread_mutex_unlock(&now_coder->config->mutex_status);
 	}
 	pthread_mutex_unlock(&now_coder->config->mutex_status);
