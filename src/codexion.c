@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 15:10:57 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/15 21:22:32 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/16 01:41:32 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,21 @@
 
 static void	request_dongle(t_coder *coder, t_dongle *dongle)
 {
+	if (coder_check_flag(coder))
+		return ;
 	pthread_mutex_lock(&dongle->mutex);
 	insert_heap(dongle->heap, coder);
 	if (dongle->schedule == EDF && dongle->heap->size > 1)
 		heapify(dongle->heap);
 	while (dongle->heap->array[0]->id != coder->id)
+	{
+		if (coder_check_flag(coder))
+		{
+			pthread_mutex_unlock(&dongle->mutex);
+			return ;
+		}
 		pthread_cond_wait(&dongle->cond, &dongle->mutex);
+	}
 	pthread_mutex_unlock(&dongle->mutex);
 }
 

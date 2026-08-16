@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 02:42:42 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/15 11:07:35 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/16 01:41:07 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,11 @@ void	coder_compiling(void *coder)
 
 	now_coder = coder;
 	if (coder_check_flag(now_coder))
+	{
+		pthread_cond_signal(&now_coder->left_dongle->cond);
+		pthread_cond_signal(&now_coder->right_dongle->cond);
 		return ;
+	}
 	pthread_mutex_lock(&now_coder->left_dongle->mutex);
 	pthread_mutex_lock(&now_coder->right_dongle->mutex);
 	dongle_cooldown(coder, now_coder->left_dongle);
@@ -76,6 +80,8 @@ void	coder_compiling(void *coder)
 	{
 		pthread_mutex_unlock(&now_coder->left_dongle->mutex);
 		pthread_mutex_unlock(&now_coder->right_dongle->mutex);
+		pthread_cond_signal(&now_coder->left_dongle->cond);
+		pthread_cond_signal(&now_coder->right_dongle->cond);
 		return ;
 	}
 	printf("%ld %d has taken a dongle\n",
