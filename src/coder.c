@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 02:42:42 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/16 01:41:07 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/17 02:42:52 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "dongle.h"
 #include "codexion.h"
 #include "heap.h"
-
 #include <stdbool.h>
 #include <pthread.h>
 #include <stdlib.h>
@@ -67,23 +66,13 @@ void	coder_compiling(void *coder)
 
 	now_coder = coder;
 	if (coder_check_flag(now_coder))
-	{
-		pthread_cond_signal(&now_coder->left_dongle->cond);
-		pthread_cond_signal(&now_coder->right_dongle->cond);
-		return ;
-	}
+		return (wakeup_coders_in_heap(now_coder, false));
 	pthread_mutex_lock(&now_coder->left_dongle->mutex);
 	pthread_mutex_lock(&now_coder->right_dongle->mutex);
 	dongle_cooldown(coder, now_coder->left_dongle);
 	dongle_cooldown(coder, now_coder->right_dongle);
 	if (coder_check_flag(now_coder))
-	{
-		pthread_mutex_unlock(&now_coder->left_dongle->mutex);
-		pthread_mutex_unlock(&now_coder->right_dongle->mutex);
-		pthread_cond_signal(&now_coder->left_dongle->cond);
-		pthread_cond_signal(&now_coder->right_dongle->cond);
-		return ;
-	}
+		return (wakeup_coders_in_heap(now_coder, true));
 	printf("%ld %d has taken a dongle\n",
 		get_time_of_now(now_coder->config->start_time), now_coder->id);
 	printf("%ld %d has taken a dongle\n",
@@ -95,13 +84,7 @@ void	coder_compiling(void *coder)
 	printf("%ld %d is compiling\n",
 		get_time_of_now(now_coder->config->start_time), now_coder->id);
 	coder_sleeping(now_coder, now_coder->config->time_to_compile);
-	extract_coder(now_coder->left_dongle->heap);
-	extract_coder(now_coder->right_dongle->heap);
-	pthread_mutex_unlock(&now_coder->left_dongle->mutex);
-	pthread_mutex_unlock(&now_coder->right_dongle->mutex);
-	pthread_cond_signal(&now_coder->left_dongle->cond);
-	pthread_cond_signal(&now_coder->right_dongle->cond);
-	now_coder->numbers_of_compiles += 1;
+	release_dongles(now_coder);
 }
 
 void	coder_debugging(void *coder)

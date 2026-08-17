@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 15:10:57 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/16 01:41:32 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/17 02:41:04 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,34 +72,18 @@ static void	*routine(void *coder)
 	t_coder			*now_coder;
 
 	now_coder = coder;
-
-	while (true)
-	{
-		pthread_mutex_lock(&now_coder->config->mutex_status);
-		if (now_coder->config->status == 2)
-		{
-			pthread_mutex_unlock(&now_coder->config->mutex_status);
-			return (NULL);
-		}
-		else if (now_coder->config->status == 1)
-			break ;
-		pthread_mutex_unlock(&now_coder->config->mutex_status);
-	}
-	pthread_mutex_unlock(&now_coder->config->mutex_status);
-
+	if (!check_status(now_coder->config))
+		return (NULL);
 	sleep_even(now_coder);
 	if (coder_check_flag(now_coder))
 		return (NULL);
 	while (true)
 	{
 		get_dongles(now_coder);
-		pthread_mutex_lock(&now_coder->config->mutex_burnout);
-		if (now_coder->config->flag_burnout)
-		{
-			pthread_mutex_unlock(&now_coder->config->mutex_burnout);
+		if (coder_check_flag(now_coder))
 			return (NULL);
-		}
-		else if (now_coder->numbers_of_compiles
+		pthread_mutex_lock(&now_coder->config->mutex_burnout);
+		if (now_coder->numbers_of_compiles
 			== now_coder->config->number_of_compiles_required)
 			now_coder->config->number_of_coders_completed++;
 		if (now_coder->config->number_of_coders_completed
@@ -128,18 +112,14 @@ static int	run_threads(t_sim *sim)
 				sim->coders[i]) != 0)
 		{
 			fprintf(stderr, "Error: Failed to create coder thread\n");
-			pthread_mutex_lock(&sim->config->mutex_status);
-			sim->config->status = 2;
-			pthread_mutex_unlock(&sim->config->mutex_status);
+			change_status(sim->config, 2);
 			join_and_cleanup(sim, i);
 			return (0);
 		}
 		i++;
 	}
 	sim->config->start_time = get_time_of_now(0);
-	pthread_mutex_lock(&sim->config->mutex_status);
-	sim->config->status = 1;
-	pthread_mutex_unlock(&sim->config->mutex_status);
+	change_status(sim->config, 1);
 	return (1);
 }
 

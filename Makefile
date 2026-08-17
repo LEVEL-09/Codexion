@@ -14,10 +14,10 @@ DBGT = -fsanitize=thread -g3
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(DBGT) $(OBJ) -o $(NAME)
+	$(CC) $(OBJ) -o $(NAME)
 
 %.o: %.c
-	$(CC) $(DBGT) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(OBJ) $(DEP)

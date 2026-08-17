@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 18:22:23 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/15 13:13:33 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/17 01:29:44 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,22 @@ void	join_and_cleanup(t_sim *sim, int count)
 	if (pthread_join(sim->monitor->thread, NULL) != 0)
 		fprintf(stderr, "Error: Failed to join monitor thread\n");
 	destroy_everything(sim, sim->config->number_of_coders);
+}
+
+int	check_status(t_config *config)
+{
+	while (true)
+	{
+		pthread_mutex_lock(&config->mutex_status);
+		if (config->status == 2)
+		{
+			pthread_mutex_unlock(&config->mutex_status);
+			return (0);
+		}
+		else if (config->status == 1)
+			break ;
+		pthread_mutex_unlock(&config->mutex_status);
+	}
+	pthread_mutex_unlock(&config->mutex_status);
+	return (1);
 }

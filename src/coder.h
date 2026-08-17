@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 02:41:42 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/13 17:53:17 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/17 01:59:34 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,6 @@ void		init_coder_with_dongles(t_coder	**coders,
 				t_dongle **dongles,
 				int number_of_coders);
 void		release_dongles(t_coder *coder);
+void		wakeup_coders_in_heap(t_coder *coder, bool unlock_flag);
 
 #endif

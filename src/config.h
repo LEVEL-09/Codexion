@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/07 03:10:42 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/15 16:42:36 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/17 01:28:35 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ typedef struct s_config
 
 t_config	*init_config(char *argv[]);
 void		*destroy_config(t_config *config);
+void		change_status(t_config *config, short new_status);
 
 #endif

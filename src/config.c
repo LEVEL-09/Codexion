@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/07 03:10:38 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/15 23:10:15 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/17 01:27:58 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,16 @@ t_config	*init_config(char *argv[])
 
 void	*destroy_config(t_config *config)
 {
+	pthread_mutex_destroy(&config->mutex_status);
 	pthread_mutex_destroy(&config->mutex_burnout);
 	pthread_cond_destroy(&config->cond_burnout);
 	free(config);
 	return (NULL);
+}
+
+void	change_status(t_config *config, short new_status)
+{
+	pthread_mutex_lock(&config->mutex_status);
+	config->status = new_status;
+	pthread_mutex_unlock(&config->mutex_status);
 }

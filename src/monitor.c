@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 02:54:39 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/15 21:18:43 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/17 01:23:13 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,8 @@ void	*monitor_check(void *monitor)
 
 	i = 0;
 	now_monitor = monitor;
-
-	while (true)
-	{
-		pthread_mutex_lock(&now_monitor->config->mutex_status);
-		if (now_monitor->config->status == 2)
-		{
-			pthread_mutex_unlock(&now_monitor->config->mutex_status);
-			return (NULL);
-		}
-		else if (now_monitor->config->status == 1)
-			break ;
-		pthread_mutex_unlock(&now_monitor->config->mutex_status);
-	}
-	pthread_mutex_unlock(&now_monitor->config->mutex_status);
-
+	if (!check_status(now_monitor->config))
+		return (NULL);
 	while (true)
 	{
 		if (i >= now_monitor->config->number_of_coders)

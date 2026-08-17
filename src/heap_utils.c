@@ -6,13 +6,12 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 09:27:04 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/15 02:25:21 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/17 01:39:13 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "heap.h"
 #include "coder.h"
-#include "config.h"
 
 void	swap_coder(t_coder **a, t_coder **b)
 {
