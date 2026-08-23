@@ -61,7 +61,7 @@ int	check_argument(int argc, char *argv[])
 			return (0);
 		i++;
 	}
-	if (*argv[1] == '0' || *argv[6] == '0')
+	if (*argv[1] == '0')
 		return (0);
 	return (1);
 }

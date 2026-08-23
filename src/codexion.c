@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 15:10:57 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/17 02:41:04 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/23 21:03:35 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,8 @@ int	main(int argc, char *argv[])
 {
 	t_sim	sim;
 
+	if (*argv[6] == '0')
+		return (0);
 	if (!init_simulation(argc, argv, &sim))
 		return (1);
 	if (!run_threads(&sim))
