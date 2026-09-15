@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/07 03:10:38 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/10 17:43:42 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/17 01:27:58 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,18 @@ t_config	*init_config(char *argv[])
 	config = malloc(sizeof(t_config));
 	if (!config)
 		return (NULL);
-	config->number_of_coders = (int)ft_atoi(argv[1]);
-	config->time_to_burnout = (int)ft_atoi(argv[2]);
-	config->time_to_compile = (int)ft_atoi(argv[3]);
-	config->time_to_debug = (int)ft_atoi(argv[4]);
-	config->time_to_refactor = (int)ft_atoi(argv[5]);
-	config->number_of_coders_completed = 0;
-	config->start_time = get_time_of_now(0);
-	config->flag_burnout = false;
+	*config = (t_config){
+		.number_of_coders = (int)ft_atoi(argv[1]),
+		.time_to_burnout = (int)ft_atoi(argv[2]),
+		.time_to_compile = (int)ft_atoi(argv[3]),
+		.time_to_debug = (int)ft_atoi(argv[4]),
+		.time_to_refactor = (int)ft_atoi(argv[5]),
+		.number_of_compiles_required = (int)ft_atoi(argv[6]),
+		.number_of_coders_completed = 0,
+		.flag_burnout = false,
+		.status = 0
+	};
+	pthread_mutex_init(&config->mutex_status, NULL);
 	pthread_mutex_init(&config->mutex_burnout, NULL);
 	pthread_cond_init(&config->cond_burnout, NULL);
 	return (config);
@@ -38,8 +42,16 @@ t_config	*init_config(char *argv[])
 
 void	*destroy_config(t_config *config)
 {
+	pthread_mutex_destroy(&config->mutex_status);
 	pthread_mutex_destroy(&config->mutex_burnout);
 	pthread_cond_destroy(&config->cond_burnout);
 	free(config);
 	return (NULL);
+}
+
+void	change_status(t_config *config, short new_status)
+{
+	pthread_mutex_lock(&config->mutex_status);
+	config->status = new_status;
+	pthread_mutex_unlock(&config->mutex_status);
 }

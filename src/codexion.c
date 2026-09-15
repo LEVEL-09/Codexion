@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 15:10:57 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/11 01:14:09 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/09/15 19:11:30 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,21 @@
 
 static void	request_dongle(t_coder *coder, t_dongle *dongle)
 {
+	if (coder_check_flag(coder))
+		return ;
 	pthread_mutex_lock(&dongle->mutex);
 	insert_heap(dongle->heap, coder);
 	if (dongle->schedule == EDF && dongle->heap->size > 1)
 		heapify(dongle->heap);
 	while (dongle->heap->array[0]->id != coder->id)
+	{
+		if (coder_check_flag(coder))
+		{
+			pthread_mutex_unlock(&dongle->mutex);
+			return ;
+		}
 		pthread_cond_wait(&dongle->cond, &dongle->mutex);
-	extract_coder(dongle->heap);
+	}
 	pthread_mutex_unlock(&dongle->mutex);
 }
 
@@ -64,27 +72,27 @@ static void	*routine(void *coder)
 	t_coder			*now_coder;
 
 	now_coder = coder;
+	if (!check_status(now_coder->config))
+		return (NULL);
 	sleep_even(now_coder);
 	if (coder_check_flag(now_coder))
 		return (NULL);
 	while (true)
 	{
-		pthread_mutex_lock(&now_coder->config->mutex_burnout);
-		if (now_coder->number_of_compiles_required <= 0)
-		{
-			now_coder->config->number_of_coders_completed++;
-			now_coder->flag_complete = true;
-			pthread_mutex_unlock(&now_coder->config->mutex_burnout);
-			break ;
-		}
-		if (now_coder->config->flag_burnout)
-		{
-			pthread_mutex_unlock(&now_coder->config->mutex_burnout);
+		get_dongles(now_coder);
+		if (coder_check_flag(now_coder))
 			return (NULL);
-		}
+		pthread_mutex_lock(&now_coder->config->mutex_burnout);
+		if (now_coder->numbers_of_compiles
+			== now_coder->config->number_of_compiles_required)
+			now_coder->config->number_of_coders_completed++;
+		if (now_coder->config->number_of_coders_completed
+			== now_coder->config->number_of_coders)
+			break ;
 		pthread_mutex_unlock(&now_coder->config->mutex_burnout);
 		get_dongles(now_coder);
 	}
+	pthread_mutex_unlock(&now_coder->config->mutex_burnout);
 	return (NULL);
 }
 
@@ -105,10 +113,14 @@ static int	run_threads(t_sim *sim)
 				sim->coders[i]) != 0)
 		{
 			fprintf(stderr, "Error: Failed to create coder thread\n");
+			change_status(sim->config, 2);
+			join_and_cleanup(sim, i);
 			return (0);
 		}
 		i++;
 	}
+	sim->config->start_time = get_time_of_now(0);
+	change_status(sim->config, 1);
 	return (1);
 }
 
@@ -116,13 +128,12 @@ int	main(int argc, char *argv[])
 {
 	t_sim	sim;
 
+	if (*argv[6] == '0')
+		return (0);
 	if (!init_simulation(argc, argv, &sim))
 		return (1);
 	if (!run_threads(&sim))
-	{
-		destroy_everything(&sim, sim.config->number_of_coders);
 		return (1);
-	}
-	join_and_cleanup(&sim);
+	join_and_cleanup(&sim, sim.config->number_of_coders);
 	return (0);
 }

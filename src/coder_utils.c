@@ -6,14 +6,14 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/24 02:56:25 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/10 17:54:28 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/17 02:42:08 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coder.h"
 #include "dongle.h"
-#include "config.h"
-#include "codexion.h"
+#include "heap.h"
+#include <stdbool.h>
 #include <pthread.h>
 
 void	init_coder_with_dongles(t_coder	**coders,
@@ -39,13 +39,21 @@ void	init_coder_with_dongles(t_coder	**coders,
 	}
 }
 
-void	release_dongles(t_coder *coder)
+void	wakeup_coders_in_heap(t_coder *coder, bool unlock_flag)
 {
+	if (unlock_flag)
+	{
+		pthread_mutex_unlock(&coder->left_dongle->mutex);
+		pthread_mutex_unlock(&coder->right_dongle->mutex);
+	}
 	pthread_cond_signal(&coder->left_dongle->cond);
 	pthread_cond_signal(&coder->right_dongle->cond);
-	pthread_mutex_lock(&coder->config->mutex_burnout);
-	coder->last_time_compile
-		= get_time_of_now(coder->config->start_time);
-	pthread_mutex_unlock(&coder->config->mutex_burnout);
-	coder->number_of_compiles_required -= 1;
+}
+
+void	release_dongles(t_coder *coder)
+{
+	extract_coder(coder->left_dongle->heap);
+	extract_coder(coder->right_dongle->heap);
+	wakeup_coders_in_heap(coder, true);
+	coder->numbers_of_compiles += 1;
 }

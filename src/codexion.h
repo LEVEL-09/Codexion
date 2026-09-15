@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 20:23:45 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/11 00:44:50 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/17 01:41:48 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int			check_argument(int argc, char *argv[]);
 long		ft_atoi(const char *str);
 void		destroy_everything(t_sim *sim, int number_of_coders);
 int			init_simulation(int argc, char **argv, t_sim *sim);
-void		join_and_cleanup(t_sim *sim);
+void		join_and_cleanup(t_sim *sim, int count);
+int			check_status(t_config *config);
 
 #endif

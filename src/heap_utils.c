@@ -6,13 +6,12 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 09:27:04 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/11 00:45:24 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/17 01:39:13 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "heap.h"
 #include "coder.h"
-#include "config.h"
 
 void	swap_coder(t_coder **a, t_coder **b)
 {
@@ -34,14 +33,14 @@ void	min_heap(t_heap *heap, int index)
 	right_coder = index * 2 + 2;
 	if (left_coder < heap->size)
 	{
-		if (heap->array[left_coder]->config->time_to_burnout
-			< heap->array[coder]->config->time_to_burnout)
+		if (heap->array[left_coder]->last_time_compile
+			< heap->array[coder]->last_time_compile)
 			coder = left_coder;
 	}
 	if (right_coder < heap->size)
 	{
-		if (heap->array[right_coder]->config->time_to_burnout
-			< heap->array[coder]->config->time_to_burnout)
+		if (heap->array[right_coder]->last_time_compile
+			< heap->array[coder]->last_time_compile)
 			coder = right_coder;
 	}
 	if (coder != index)

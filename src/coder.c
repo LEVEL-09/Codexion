@@ -6,7 +6,7 @@
 /*   By: mkhoubaz <mkhoubaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 02:42:42 by mkhoubaz          #+#    #+#             */
-/*   Updated: 2026/08/10 17:55:00 by mkhoubaz         ###   ########.fr       */
+/*   Updated: 2026/08/17 09:20:13 by mkhoubaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "config.h"
 #include "dongle.h"
 #include "codexion.h"
+#include "heap.h"
 #include <stdbool.h>
 #include <pthread.h>
 #include <stdlib.h>
@@ -32,7 +33,7 @@ void	free_coders(t_coder **coders, int count)
 	free(coders);
 }
 
-t_coder	**create_coders(t_config *config, int compiles_required)
+t_coder	**create_coders(t_config *config)
 {
 	int			i;
 	t_coder		**coders;
@@ -51,8 +52,7 @@ t_coder	**create_coders(t_config *config, int compiles_required)
 		}
 		coders[i]->id = i + 1;
 		coders[i]->last_time_compile = 0;
-		coders[i]->number_of_compiles_required = compiles_required;
-		coders[i]->flag_complete = false;
+		coders[i]->numbers_of_compiles = 0;
 		coders[i]->thread = 0;
 		coders[i]->config = config;
 		i++;
@@ -66,26 +66,24 @@ void	coder_compiling(void *coder)
 
 	now_coder = coder;
 	if (coder_check_flag(now_coder))
-		return ;
+		return (wakeup_coders_in_heap(now_coder, false));
 	pthread_mutex_lock(&now_coder->left_dongle->mutex);
 	pthread_mutex_lock(&now_coder->right_dongle->mutex);
 	dongle_cooldown(coder, now_coder->left_dongle);
 	dongle_cooldown(coder, now_coder->right_dongle);
 	if (coder_check_flag(now_coder))
-	{
-		pthread_mutex_unlock(&now_coder->left_dongle->mutex);
-		pthread_mutex_unlock(&now_coder->right_dongle->mutex);
-		return ;
-	}
+		return (wakeup_coders_in_heap(now_coder, true));
+	pthread_mutex_lock(&now_coder->config->mutex_burnout);
 	printf("%ld %d has taken a dongle\n",
 		get_time_of_now(now_coder->config->start_time), now_coder->id);
 	printf("%ld %d has taken a dongle\n",
 		get_time_of_now(now_coder->config->start_time), now_coder->id);
+	now_coder->last_time_compile
+		= get_time_of_now(now_coder->config->start_time);
 	printf("%ld %d is compiling\n",
 		get_time_of_now(now_coder->config->start_time), now_coder->id);
+	pthread_mutex_unlock(&now_coder->config->mutex_burnout);
 	coder_sleeping(now_coder, now_coder->config->time_to_compile);
-	pthread_mutex_unlock(&now_coder->left_dongle->mutex);
-	pthread_mutex_unlock(&now_coder->right_dongle->mutex);
 	release_dongles(now_coder);
 }
 
